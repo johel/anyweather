@@ -5,6 +5,23 @@ const q = 'Rio de Janeiro';
 const units='metric';
 import iconsMap from '../../constants/icons.js';
 
+function Weather(data){
+  let {main,sys,name, weather} = data;
+
+  //description and icon
+  this.description = weather[0].description;
+  this.iconName = iconsMap[weather[0].id].icon;
+
+  //range min and max
+  this.temp = main.temp;
+  this.tempMin = main.temp_min;
+  this.tempMax = main.temp_max;
+
+  //city and country
+  this.city = name;
+  this.country = sys.country;
+} 
+
 function getGeolocation(){
   return new Promise((resolve,reject) => {
     if ("geolocation" in navigator) {
@@ -20,20 +37,22 @@ function getGeolocation(){
 export default class Home extends Component {
   constructor(props){
     super(props);
-    this.state = {loading:false, data:undefined, searchText:''}
+    this.state = {loading:false, weather:undefined, searchText:''}
   }
 
   componentDidMount(){
 
-    console.log('iconsMap', iconsMap)
-
     getGeolocation().then(coords => {
       let {lat,lon} = coords;
 
+      this.setState({loading:true});
       axios.get('http://api.openweathermap.org/data/2.5/weather', {params:{lat, lon, appid:APP_ID, units}})
         .then(response => {
-          console.log('response lat e lon', response);
-          this.setState({loading:false, data:response.data});
+          // console.log('response lat e lon', response);
+          let weather = new Weather(response.data);
+          console.log('weather', weather);
+
+          this.setState({loading:false, weather});
         }).catch(err=>{
           this.setState({loading:false});
         })
@@ -53,7 +72,40 @@ export default class Home extends Component {
 
   }
 
+  renderWeather(){
+    let {weather,loading} = this.state;
+
+    if(weather && !loading){
+      return(
+        <div>
+          <h2 className="city" id="city">{weather.city}, {weather.country}</h2>
+          <div className="weather" id="weather">
+            <i className={`weather__icon wi wi-${weather.iconName}`}></i>
+            <h3 className="weather__range">{weather.tempMin}º / {weather.tempMax}º </h3>
+            <h3 className="weather__description">Few Clouds</h3>
+          </div>
+        </div>
+      )
+    }
+
+    return(
+      <div>
+          <h2 className="city" id="city">Mountain View, US</h2>
+          <div className="weather" id="weather">
+            <i className="weather__icon wi wi-day-sunny"></i>
+            <h3 className="weather__range">22º / 29º </h3>
+            <h3 className="weather__description">Few Clouds</h3>
+          </div>
+      </div>
+    )
+    
+  }
+
   render(){
+    let {weather,loading} = this.state;
+    console.log('loading',loading);
+    console.log('weather',weather);
+
     return (
       <div className="container">
         <header className="header">
@@ -68,12 +120,7 @@ export default class Home extends Component {
         <div className="content">
 
           <div className="panel">
-            <h2 className="city" id="city">Mountain View, US</h2>
-            <div className="weather" id="weather">
-              <i className="weather__icon wi wi-day-sunny"></i>
-              <h3 className="weather__range">22º / 29º </h3>
-              <h3 className="weather__description">Few Clouds</h3>
-            </div>
+            {this.renderWeather()}
             <div className="forecast">
               <div>forecast 1</div>
               <div>forecast 1</div>
