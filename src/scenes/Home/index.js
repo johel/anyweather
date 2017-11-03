@@ -75,7 +75,7 @@ function getGeolocation(){
 export default class Home extends Component {
   constructor(props){
     super(props);
-    this.state = {loading:false, weather:undefined, searchText:''}
+    this.state = {loading:false, weather:undefined, searchText:'', noCityFound:false, errorOcurred:false}
   }
 
   componentDidMount(){
@@ -88,7 +88,7 @@ export default class Home extends Component {
         .then(response => {
           let weather = new Weather(response.data);
           console.log('weather', weather);
-          this.setState({loading:false, weather});
+          this.setState({loading:false, weather, noCityFound:false, errorOcurred:false});
         }).catch(err=>{
           this.setState({loading:false});
         })
@@ -100,7 +100,32 @@ export default class Home extends Component {
   }
 
   renderWeather(){
-    let {weather,loading} = this.state;
+    let {weather,loading, noCityFound} = this.state;
+
+    if(loading){
+      return(
+        <div>
+            <h2 className="city" id="city">Buscando...</h2>
+            <div className="weather" id="weather">
+              <i className="weather__icon fa fa-search"></i>
+              <h3 className="weather__range">-- / -- </h3>
+              <h3 className="weather__description">Estamos Quase Lá</h3>
+            </div>
+        </div>
+      )
+    }
+
+    if(noCityFound){
+      return(
+        <div>
+            <h2 className="city" id="city">Cidade Não Encontrada</h2>
+            <div className="weather" id="weather">
+              <i className="weather__icon fa fa-thumbs-down"></i>
+              <h3 className="weather__description">Verifique sua busca</h3>
+            </div>
+        </div>
+      )
+    }
 
     if(weather && !loading){
       let {description, iconName, tempMin, tempMax} = weather;
@@ -116,17 +141,6 @@ export default class Home extends Component {
         </div>
       );
     }
-
-    return(
-      <div>
-          <h2 className="city" id="city">Carregando...</h2>
-          <div className="weather" id="weather">
-            <i className="weather__icon wi wi-day-sunny"></i>
-            <h3 className="weather__range">22º / 29º </h3>
-            <h3 className="weather__description">Few Clouds</h3>
-          </div>
-      </div>
-    )
     
   }
 
@@ -136,16 +150,23 @@ export default class Home extends Component {
       .then(response => {
         let weather = new Weather(response.data);
         console.log('weather', weather);
-        this.setState({loading:false, weather});
+        this.setState({loading:false, weather, noCityFound:false, errorOcurred:false});
+      },err => {
+        console.log('err',err);
+        if(err.response && err.response.status==404){
+          this.setState({loading:false, noCityFound:true, errorOcurred:false});
+        }else{
+          this.setState({loading:false, noCityFound:false, errorOcurred:true});
+        }
       }).catch(err=>{
-        this.setState({loading:false});
+        console.log('err',err);
+        this.setState({loading:false, noCityFound:false, errorOcurred:true});
       })
   }
 
   render(){
     let {weather,loading} = this.state;
-    console.log('loading',loading);
-    console.log('weather',weather);
+    console.log('state',this.state);
 
     return (
       <div className="container">
