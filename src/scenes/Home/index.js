@@ -4,6 +4,7 @@ const APP_ID = '190cbbb41d486d8f2ba59457e85701de';
 const q = 'Rio de Janeiro';
 const units='metric';
 import iconsMap from '../../constants/icons.js';
+import CurrentWeather from './components/CurrentWeather/index';
 
 function Weather(data){
   let {main,sys,name, weather} = data;
@@ -20,7 +21,17 @@ function Weather(data){
   //city and country
   this.city = name;
   this.country = sys.country;
-} 
+}
+
+// function CurrentWeather({weather}){
+//   return(
+//     <div className="weather" id="weather">
+//       <i className={`weather__icon wi wi-${weather.iconName}`}></i>
+//       <h3 className="weather__range">{weather.tempMin}º / {weather.tempMax}º </h3>
+//       <h3 className="weather__description">Few Clouds</h3>
+//     </div>
+//   )
+// }
 
 function getGeolocation(){
   return new Promise((resolve,reject) => {
@@ -76,16 +87,18 @@ export default class Home extends Component {
     let {weather,loading} = this.state;
 
     if(weather && !loading){
-      return(
+      let {description, iconName, tempMin, tempMax} = weather;
+      return (
         <div>
           <h2 className="city" id="city">{weather.city}, {weather.country}</h2>
-          <div className="weather" id="weather">
-            <i className={`weather__icon wi wi-${weather.iconName}`}></i>
-            <h3 className="weather__range">{weather.tempMin}º / {weather.tempMax}º </h3>
-            <h3 className="weather__description">Few Clouds</h3>
-          </div>
+          <CurrentWeather 
+            iconName={iconName} 
+            description={description}
+            tempMin={tempMin}
+            tempMax={tempMax}
+            />
         </div>
-      )
+      );
     }
 
     return(

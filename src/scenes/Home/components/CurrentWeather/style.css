@@ -1,0 +1,24 @@
+.weather {
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 4.8rem;
+}
+
+.weather__icon{
+  font-size: 100%;
+  margin-bottom: 0.3em;
+}
+
+.weather__range{
+  font-size: 80%;
+  margin-bottom: 0.3em;
+}
+
+.weather__description{
+  font-size: 80%;
+  margin-bottom: 0.3em;
+  /*color: var(--color-primary-dark);*/
+}
