@@ -10,7 +10,7 @@ e da utilização do redux. A utilização do redux para gerenciamento do estado
 considero bem habituado, conhecendo boas práticas como a utilização de selectors para já entregar o estado de forma semântica
 para cada componente.
 
-Pretendo dar continuidade ao projeto em outro branch para suprir as pendências e, caso seja conveniente, por favor verificar.
+Pretendo dar continuidade ao projeto em outro branch para suprir as pendências e, caso seja conveniente, por favor verificar atualizações no dia da avaliação.
 
 A criação do esqueleto do projeto foi extensa e demandou bastante tempo para ser customizada, embora tenha sido baseada
 em um curso de webpack2 oferecido pelo udemy. Por essa razão, fez-se um commit acumulado inicial,
@@ -32,3 +32,13 @@ Development - porta 8080
 Build
 1.npm install
 2.npm run build
+
+### Milestones
+
+1. Refatorar
+2. Passar pra redux e componentizar adequadamente, separando containers e presentational components.
+3. Implementar busca reativa no evento on change, utilizando RxJS e seu método switchMapLatest
+4. Utilizar flow e linters
+5. Implementar testes unitários, utilizando jest e enzyme
+6. Adicionar previsões do tempo dos 5 próximos dias e melhorar design/layout da aplicação
+
