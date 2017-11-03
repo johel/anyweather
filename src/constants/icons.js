@@ -197,7 +197,7 @@ export default {
    },
    "800":{  
       "label":"clear sky",
-      "icon":"sunny"
+      "icon":"day-sunny"
    },
    "801":{  
       "label":"few clouds",

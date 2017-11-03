@@ -86,7 +86,6 @@ h4 {
 
 .panel {
   padding: 3rem 0 0 0;
-  border:1px solid black;
   width: 80%;
   margin: 0 auto;
   color: var(--color-primary);
@@ -136,6 +135,7 @@ h4 {
     background-color: var(--color-grey-light-2); 
     align-self: stretch;
     width: 20px;
+    cursor:pointer;
   }
 
   .search__button:focus {
