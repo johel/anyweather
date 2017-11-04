@@ -23,6 +23,7 @@ export default function currentWeatherReducer(state = initialState, action){
 			return Object.assign({}, state, {isLoading:true});
 		case FETCH_CURRENT_WEATHER_SUCCESS:
 			let {data} = action.payload;
+
 			return {weather:data, error:undefined, isLoading:false};
 		case FETCH_CURRENT_WEATHER_FAIL:
 			let {status} = action.payload;

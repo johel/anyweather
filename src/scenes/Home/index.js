@@ -1,26 +1,17 @@
 import React, {Component} from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as weatherActions from '../../services/weather/actions.js';
 import axios from 'axios';
 import iconsMap from '../../constants/icons.js';
 import CurrentWeather from './components/CurrentWeather';
+import WeatherPanel from './WeatherPanel';
 import UncontrolledSearchBar from '../../components/UncontrolledSearchBar';
 import {requestWeatherDataByCoordinates, requestWeatherDataByCity} from '../../services/api';
 
-function Weather(data){
-  let {main,sys,name, weather} = data;
-
-  //description and icon
-  this.description = weather[0].description;
-  this.iconName = iconsMap[weather[0].id].icon;
-
-  //range min and max
-  this.temp = main.temp;
-  this.tempMin = main.temp_min;
-  this.tempMax = main.temp_max;
-
-  //city and country
-  this.city = name;
-  this.country = sys.country;
-}
+const SearchBar = connect(null,{
+  onSearch: weatherActions.getCurrentWeatherDataByCity
+})(UncontrolledSearchBar);
 
 
 function getGeolocation(){
@@ -38,109 +29,40 @@ function getGeolocation(){
 export default class Home extends Component {
   constructor(props){
     super(props);
-    this.state = {loading:false, weather:undefined, searchText:'', noCityFound:false, errorOcurred:false}
   }
 
   componentDidMount(){
 
-    getGeolocation().then(coords => {
-      let {lat,lon} = coords;
+    // getGeolocation().then(coords => {
+    //   let {lat,lon} = coords;
 
-      this.setState({loading:true});
-      requestWeatherDataByCoordinates(lat,lon)
-        .then(data => {
-          let weather = new Weather(data);
-          console.log('weather', weather);
-          this.setState({loading:false, weather, noCityFound:false, errorOcurred:false});
-        }).catch(err=>{
-          this.setState({loading:false});
-        })
+    //   this.setState({loading:true});
+    //   requestWeatherDataByCoordinates(lat,lon)
+    //     .then(data => {
+    //       let weather = new Weather(data);
+    //       console.log('weather', weather);
+    //       this.setState({loading:false, weather, noCityFound:false, errorOcurred:false});
+    //     }).catch(err=>{
+    //       this.setState({loading:false});
+    //     })
 
-    }, err => {
-      console.log(err);
-    })
+    // }, err => {
+    //   console.log(err);
+    // })
 
-  }
-
-  renderWeather(){
-    let {weather,loading, noCityFound} = this.state;
-
-    if(loading){
-      return(
-        <div>
-            <h2 className="city" id="city">Searching...</h2>
-            <div className="weather" id="weather">
-              <i className="weather__icon fa fa-search"></i>
-              <h3 className="weather__range">-- / -- </h3>
-              <h3 className="weather__description">Almost There</h3>
-            </div>
-        </div>
-      )
-    }
-
-    if(noCityFound){
-      return(
-        <div>
-            <h2 className="city" id="city">No Results</h2>
-            <div className="weather" id="weather">
-              <i className="weather__icon fa fa-thumbs-down"></i>
-              <h3 className="weather__description">Verify your search</h3>
-            </div>
-        </div>
-      )
-    }
-
-    if(weather && !loading){
-      let {description, iconName, tempMin, tempMax} = weather;
-      return (
-        <div>
-          <h2 className="city" id="city">{weather.city}, {weather.country}</h2>
-          <CurrentWeather 
-            iconName={iconName} 
-            description={description}
-            tempMin={tempMin}
-            tempMax={tempMax}
-            />
-        </div>
-      );
-    }
-    
-  }
-
-  searchCityWeather(cityName){
-    this.setState({loading:true});
-    requestWeatherDataByCity(cityName)
-      .then(data => {
-        let weather = new Weather(data);
-        console.log('weather', weather);
-        this.setState({loading:false, weather, noCityFound:false, errorOcurred:false});
-      },err => {
-        console.log('err',err);
-        if(err.response && (err.response.status==404 || err.response.status==400)){
-          this.setState({loading:false, noCityFound:true, errorOcurred:false});
-        }else{
-          this.setState({loading:false, noCityFound:false, errorOcurred:true});
-        }
-      }).catch(err=>{
-        console.log('err',err);
-        this.setState({loading:false, noCityFound:false, errorOcurred:true});
-      })
   }
 
   render(){
-    let {weather,loading} = this.state;
-    console.log('state',this.state);
-
     return (
       <div className="container">
         <header className="header">
-          <UncontrolledSearchBar onSearch={this.searchCityWeather.bind(this)}/>
+          <SearchBar/>
         </header>
 
         <div className="content">
 
           <div className="panel">
-            {this.renderWeather()}
+            <WeatherPanel />
           </div>
 
         </div>
