@@ -21,7 +21,14 @@ mais especificamente os weather-icons que tiveram que ter um arquivo de mapeamen
 indicados pelo open weather map api.
 
 No mais, procurou-se utilizar uma arquitetura de aplicações robustas no projeto, visando à demonstração das melhores práticas
-de desenvolmento em react.
+de desenvolvimento em react.
+
+### Modificações pós-prazo no branch After
+1.
+ - Corrigido problemas de layout em termos de responsividade
+ - Criação e Refatoração do componente UncontrolledSearchBar com a finalidade de melhor reaproveitamento
+ - Padronização de avisos e warning em inglês.
+ - Tratamento de buscas inválidas/vazias - erro 400
 
 ### Setup
 
