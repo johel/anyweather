@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import iconsMap from '../../constants/icons.js';
-import CurrentWeather from './components/CurrentWeather/index';
+import CurrentWeather from './components/CurrentWeather';
+import UncontrolledSearchBar from '../../components/UncontrolledSearchBar';
+
 const APP_ID = '190cbbb41d486d8f2ba59457e85701de';
 const q = 'Rio de Janeiro';
 const units='metric';
@@ -23,41 +25,6 @@ function Weather(data){
   this.city = name;
   this.country = sys.country;
 }
-
-class UncontrolledSearchBar extends Component {
-  constructor(props){
-    super(props);  
-    this.onClick = this.onClick.bind(this); 
-    this.onKeyPress = this.onKeyPress.bind(this); 
-  }
-
-  onClick(e) {
-    console.log('event click', e)
-    const input = this.refs.myInput;  
-    const value = input.value;  
-    this.props.onSearch(value);
-  }
-
-  onKeyPress(e) {
-    if (e.key === 'Enter') {
-      console.log('pressed enter - chamar api', e.target.value);
-      this.props.onSearch(e.target.value);
-    }
-  }
-
-  render(){
-
-    return(
-      <div action="#" className="search">
-        <input ref="myInput" type="text" className="search__input" onKeyPress={this.onKeyPress} placeholder="Search anywhere" />
-        <button className="search__button" onClick={this.onClick}>
-          <i className="fa fa-search search__icon"></i>
-        </button>
-      </div>
-    )
-  }
-
-} 
 
 
 function getGeolocation(){
@@ -105,11 +72,11 @@ export default class Home extends Component {
     if(loading){
       return(
         <div>
-            <h2 className="city" id="city">Buscando...</h2>
+            <h2 className="city" id="city">Searching...</h2>
             <div className="weather" id="weather">
               <i className="weather__icon fa fa-search"></i>
               <h3 className="weather__range">-- / -- </h3>
-              <h3 className="weather__description">Estamos Quase Lá</h3>
+              <h3 className="weather__description">Almost There</h3>
             </div>
         </div>
       )
@@ -118,10 +85,10 @@ export default class Home extends Component {
     if(noCityFound){
       return(
         <div>
-            <h2 className="city" id="city">Cidade Não Encontrada</h2>
+            <h2 className="city" id="city">No Results</h2>
             <div className="weather" id="weather">
               <i className="weather__icon fa fa-thumbs-down"></i>
-              <h3 className="weather__description">Verifique sua busca</h3>
+              <h3 className="weather__description">Verify your search</h3>
             </div>
         </div>
       )
@@ -153,7 +120,7 @@ export default class Home extends Component {
         this.setState({loading:false, weather, noCityFound:false, errorOcurred:false});
       },err => {
         console.log('err',err);
-        if(err.response && err.response.status==404){
+        if(err.response && (err.response.status==404 || err.response.status==400)){
           this.setState({loading:false, noCityFound:true, errorOcurred:false});
         }else{
           this.setState({loading:false, noCityFound:false, errorOcurred:true});
