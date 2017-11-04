@@ -2,16 +2,20 @@
 import { combineReducers } from 'redux';
 import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
-import logger from 'redux-logger';
+import Logger from 'redux-logger';
+import currentWeatherReducer, * as fromWeather from './services/weather/reducer';
 
-function weatherReducer(state={}, action){
-	return state;
+//SELECTORS
+export function wasCurrentWeatherDataFound(state){
+	return fromWeather.wasDataFound(state.weather);
 }
 
 let reducers = combineReducers({
-  weather: weatherReducer
+  weather: currentWeatherReducer
 });
 
-const store = createStore(reducers, {}, applyMiddleware(ReduxThunk, logger));
+const store = createStore(reducers, {}, applyMiddleware(ReduxThunk, Logger));
+
+// store.dispatch({type:'FETCH_CURRENT_WEATHER'});
 
 export default store;
