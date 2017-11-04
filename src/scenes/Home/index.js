@@ -3,11 +3,7 @@ import axios from 'axios';
 import iconsMap from '../../constants/icons.js';
 import CurrentWeather from './components/CurrentWeather';
 import UncontrolledSearchBar from '../../components/UncontrolledSearchBar';
-
-const APP_ID = '190cbbb41d486d8f2ba59457e85701de';
-const q = 'Rio de Janeiro';
-const units='metric';
-const BASE_URL = "https:\//api.openweathermap.org/data/2.5/weather";
+import {requestWeatherDataByCoordinates, requestWeatherDataByCity} from '../../services/api';
 
 function Weather(data){
   let {main,sys,name, weather} = data;
@@ -51,9 +47,9 @@ export default class Home extends Component {
       let {lat,lon} = coords;
 
       this.setState({loading:true});
-      axios.get(BASE_URL, {params:{lat, lon, appid:APP_ID, units}})
-        .then(response => {
-          let weather = new Weather(response.data);
+      requestWeatherDataByCoordinates(lat,lon)
+        .then(data => {
+          let weather = new Weather(data);
           console.log('weather', weather);
           this.setState({loading:false, weather, noCityFound:false, errorOcurred:false});
         }).catch(err=>{
@@ -113,9 +109,9 @@ export default class Home extends Component {
 
   searchCityWeather(cityName){
     this.setState({loading:true});
-    axios.get(BASE_URL, {params:{q:cityName, appid:APP_ID, units}})
-      .then(response => {
-        let weather = new Weather(response.data);
+    requestWeatherDataByCity(cityName)
+      .then(data => {
+        let weather = new Weather(data);
         console.log('weather', weather);
         this.setState({loading:false, weather, noCityFound:false, errorOcurred:false});
       },err => {
