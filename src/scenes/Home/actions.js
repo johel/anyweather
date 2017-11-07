@@ -50,13 +50,19 @@ export const getCurrentWeatherDataByCity = (city) => (dispatch) => {
 }
 
 export const  getInitialWeatherData = () => (dispatch) => {
+  console.log('getInitial data');
   dispatch({type:RETRIEVE_LOCATION});
   return  getGeolocation().then(({lat,lon}) => {
+    console.log("CHEGOU AQUI!!!")
     return getCurrentWeatherDataByCoordinates(lat,lon,dispatch);
   }, err => {
     console.log('erro de permissão de geo data');
+    dispatch({type:RETRIEVE_LOCATION_FAIL});
+  }).catch(err => {
+    console.log('erro de permissão catch de geo data');
+    dispatch({type:RETRIEVE_LOCATION_FAIL});
   })
-}
+}//
 
 function getCurrentWeatherDataByCoordinates(lat,lon, dispatch){
   return requestWeatherDataByCoordinates(lat,lon)

@@ -21,10 +21,15 @@ export function requestWeatherDataByCity(cityName){
 }
 
 export function getGeolocation(){
+	console.log("getGeolocation");
   return new Promise((resolve,reject) => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(function(position) {
+      	console.log("!!!!position!!!!")
         resolve({lat:position.coords.latitude, lon:position.coords.longitude});
+      },function(err) {
+      	console.log("!!!!err!!!!")
+      	reject(err);
       });
     } else {
       reject("I'm sorry, but geolocation services are not supported by your browser.");

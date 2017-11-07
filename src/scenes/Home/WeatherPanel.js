@@ -13,15 +13,15 @@ class WeatherPanel extends Component{
   }
 
 	render(){
-		let {weather,loading, isRetrievingLocation, wasCityFound} = this.props;
+		let {weather,loading, isRetrievingLocation, error} = this.props;
 		console.log('this.props', this.props);
 
     if(isRetrievingLocation){
       return(
         <div>
-          <h2 className="city" id="city">Retrieving your location...</h2>
-          <div className="weather" id="weather">
-            <i className="weather__icon fa fa-search"></i>
+          <h2 className="city">Retrieving your location...</h2>
+          <div className="weather">
+            <i className="weather__icon fa fa-map-marker"></i>
             <h3 className="weather__range">-- / -- </h3>
             <h3 className="weather__description">Almost There</h3>
           </div>
@@ -32,8 +32,8 @@ class WeatherPanel extends Component{
     if(loading){
       return(
         <div>
-          <h2 className="city" id="city">Searching...</h2>
-          <div className="weather" id="weather">
+          <h2 className="city">Searching...</h2>
+          <div className="weather">
             <i className="weather__icon fa fa-search"></i>
             <h3 className="weather__range">-- / -- </h3>
             <h3 className="weather__description">Almost There</h3>
@@ -42,11 +42,11 @@ class WeatherPanel extends Component{
       )
     }
 
-    if(!wasCityFound){
+    if(error){
       return(
         <div>
-            <h2 className="city" id="city">No Results</h2>
-            <div className="weather" id="weather">
+            <h2 className="city">No Results</h2>
+            <div className="weather">
               <i className="weather__icon fa fa-thumbs-down"></i>
               <h3 className="weather__description">Verify your search</h3>
             </div>
@@ -58,7 +58,7 @@ class WeatherPanel extends Component{
       let {description, iconName, tempMin, tempMax} = weather;
       return (
         <div>
-          <h2 className="city" id="city">{weather.city}, {weather.country}</h2>
+          <h2 className="city">{weather.city}, {weather.country}</h2>
           <CurrentWeather 
             iconName={iconName} 
             description={description}
@@ -72,11 +72,11 @@ class WeatherPanel extends Component{
 
      return(
         <div>
-          <h2 className="city" id="city">Olá</h2>
-          <div className="weather" id="weather">
+          <h2 className="city">Hey</h2>
+          <div className="weather">
             <i className="weather__icon fa fa-search"></i>
             <h3 className="weather__range">-- / -- </h3>
-            <h3 className="weather__description">Pesquise uma Cidade</h3>
+            <h3 className="weather__description">Search Anywhere</h3>
           </div>
         </div>
       )
@@ -90,7 +90,7 @@ const mapStateToProps = (state) =>{
 		weather:state.weather.weather,
 		loading:state.weather.isLoading,
     isRetrievingLocation: state.weather.isRetrievingLocation,
-		wasCityFound: !!state.weather.weather,
+		error: state.weather.error,
 	}
 }
 

@@ -24,6 +24,8 @@ export default function currentWeatherReducer(state = initialState, action){
 	switch (action.type){
 		case RETRIEVE_LOCATION:
 			return Object.assign({}, state, {isRetrievingLocation:true});
+		case RETRIEVE_LOCATION_FAIL:
+			return Object.assign({}, state, {isRetrievingLocation:false});
 		case FETCH_CURRENT_WEATHER:
 			return Object.assign({}, state, {isLoading:true});
 		case FETCH_CURRENT_WEATHER_SUCCESS:
