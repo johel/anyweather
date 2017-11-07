@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import CurrentWeather from './components/CurrentWeather';
-import * as weatherActions from '../../services/weather/actions.js';
+import * as weatherActions from './actions.js';
 
 class WeatherPanel extends Component{
 	constructor(props){

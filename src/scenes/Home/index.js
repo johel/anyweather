@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as weatherActions from '../../services/weather/actions.js';
+import * as weatherActions from './actions.js';
 import axios from 'axios';
 import iconsMap from '../../constants/icons.js';
 import CurrentWeather from './components/CurrentWeather';

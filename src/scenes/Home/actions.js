@@ -3,7 +3,7 @@ import {
 	FETCH_CURRENT_WEATHER_SUCCESS,
 	FETCH_CURRENT_WEATHER_FAIL
 } from './constants.js';
-import {requestWeatherDataByCoordinates, requestWeatherDataByCity} from '../api';
+import {requestWeatherDataByCoordinates, requestWeatherDataByCity} from '~/services/api';
 import iconsMap from '../../constants/icons.js';
 
 function Weather(data){
