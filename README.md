@@ -29,6 +29,12 @@ de desenvolvimento em react.
  - Criação e Refatoração do componente UncontrolledSearchBar com a finalidade de melhor reaproveitamento
  - Padronização de avisos e warning em inglês.
  - Tratamento de buscas inválidas/vazias - erro 400
+ 
+ 2.
+ - Utilização de redux, criação de containers e presentational components;
+ - Mudança na arquitetura;
+ - Tratamento do caso em que usuário não dá permissão ao geolocalizador, este caso porém está com bug no firefox browser
+ pois este não reconhe o evento de negativa do usuário(todo);
 
 ### Setup
 
