@@ -1,9 +1,11 @@
 import {
 	FETCH_CURRENT_WEATHER,
 	FETCH_CURRENT_WEATHER_SUCCESS,
-	FETCH_CURRENT_WEATHER_FAIL
+	FETCH_CURRENT_WEATHER_FAIL,
+  RETRIEVE_LOCATION,
+  RETRIEVE_LOCATION_FAIL
 } from './constants.js';
-import {requestWeatherDataByCoordinates, requestWeatherDataByCity} from '~/services/api';
+import {requestWeatherDataByCoordinates, requestWeatherDataByCity, getGeolocation} from '~/services/api';
 import iconsMap from '../../constants/icons.js';
 
 function Weather(data){
@@ -47,6 +49,19 @@ export const getCurrentWeatherDataByCity = (city) => (dispatch) => {
     })
 }
 
-export function getCurrentWeatherDataByCoordinates(lat,lon){
-	
+export const  getInitialWeatherData = () => (dispatch) => {
+  dispatch({type:RETRIEVE_LOCATION});
+  return  getGeolocation().then(({lat,lon}) => {
+    return getCurrentWeatherDataByCoordinates(lat,lon,dispatch);
+  }, err => {
+    console.log('erro de permissão de geo data');
+  })
+}
+
+function getCurrentWeatherDataByCoordinates(lat,lon, dispatch){
+  return requestWeatherDataByCoordinates(lat,lon)
+    .then(data => {
+        let weather = new Weather(data);
+        dispatch({type:FETCH_CURRENT_WEATHER_SUCCESS, payload:{data:weather.toPlainObject()}});
+    })
 }

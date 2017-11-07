@@ -19,3 +19,15 @@ export function requestWeatherDataByCity(cityName){
 		return response.data;
 	})
 }
+
+export function getGeolocation(){
+  return new Promise((resolve,reject) => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        resolve({lat:position.coords.latitude, lon:position.coords.longitude});
+      });
+    } else {
+      reject("I'm sorry, but geolocation services are not supported by your browser.");
+    }
+  })
+}

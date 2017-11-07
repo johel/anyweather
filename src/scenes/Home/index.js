@@ -14,42 +14,9 @@ const SearchBar = connect(null,{
 })(UncontrolledSearchBar);
 
 
-function getGeolocation(){
-  return new Promise((resolve,reject) => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        resolve({lat:position.coords.latitude, lon:position.coords.longitude});
-      });
-    } else {
-      reject("I'm sorry, but geolocation services are not supported by your browser.");
-    }
-  })
-}
-
 export default class Home extends Component {
   constructor(props){
     super(props);
-  }
-
-  componentDidMount(){
-
-    // getGeolocation().then(coords => {
-    //   let {lat,lon} = coords;
-
-    //   this.setState({loading:true});
-    //   requestWeatherDataByCoordinates(lat,lon)
-    //     .then(data => {
-    //       let weather = new Weather(data);
-    //       console.log('weather', weather);
-    //       this.setState({loading:false, weather, noCityFound:false, errorOcurred:false});
-    //     }).catch(err=>{
-    //       this.setState({loading:false});
-    //     })
-
-    // }, err => {
-    //   console.log(err);
-    // })
-
   }
 
   render(){

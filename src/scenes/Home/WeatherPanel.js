@@ -1,16 +1,33 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import CurrentWeather from './components/CurrentWeather';
-import * as weatherActions from './actions.js';
+import {getInitialWeatherData} from './actions.js';
 
 class WeatherPanel extends Component{
 	constructor(props){
 		super(props);
 	}
 
+  componentDidMount(){
+    this.props.getInitialWeatherData();
+  }
+
 	render(){
-		let {weather,loading, wasCityFound} = this.props;
+		let {weather,loading, isRetrievingLocation, wasCityFound} = this.props;
 		console.log('this.props', this.props);
+
+    if(isRetrievingLocation){
+      return(
+        <div>
+          <h2 className="city" id="city">Retrieving your location...</h2>
+          <div className="weather" id="weather">
+            <i className="weather__icon fa fa-search"></i>
+            <h3 className="weather__range">-- / -- </h3>
+            <h3 className="weather__description">Almost There</h3>
+          </div>
+        </div>
+      )
+    }
 
     if(loading){
       return(
@@ -72,8 +89,9 @@ const mapStateToProps = (state) =>{
 	return {
 		weather:state.weather.weather,
 		loading:state.weather.isLoading,
-		wasCityFound: !!state.weather.weather
+    isRetrievingLocation: state.weather.isRetrievingLocation,
+		wasCityFound: !!state.weather.weather,
 	}
 }
 
-export default connect(mapStateToProps)(WeatherPanel);
+export default connect(mapStateToProps, {getInitialWeatherData})(WeatherPanel);
